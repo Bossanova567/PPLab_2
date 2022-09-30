@@ -49,7 +49,8 @@ class Course:
             student.course_progress.append(course_progress)
             self.students.append(student)
         else:
-            print(f"Student {student.fullname} can't enroll in this course, because the limit of students has been reached")
+            print(
+                f"Student {student.fullname} can't enroll in this course, because the limit of students has been reached")
 
     def remove_student(self, id: int) -> None:
         """Unenrolls a student from a course
@@ -67,6 +68,7 @@ class Course:
                 student.unenroll(title=self.title)
                 break
 
+
 class CourseProgress:
     """CourseProgress representation.
 
@@ -78,6 +80,7 @@ class CourseProgress:
             notes (dict): Notes about CourseProgress
 
         """
+
     def __init__(self, title: str, completed_assignments: dict, course: Course) -> None:
         """CourseProgress initializer."""
         self.title = title
@@ -141,7 +144,7 @@ class CourseProgress:
         """Delete a note about course for the date.
 
                Args:
-                    note (str): Note that is attached
+                    date (str): Date of the note, which should be deleted
 
                Returns:
                     None.

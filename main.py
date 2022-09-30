@@ -28,7 +28,7 @@ assignments = {
         'mark': 0.0
     }
 }
-#create two student
+# create two student
 student2 = Student(full_name='test_student2',
                    address='test2', phone_number='test2',
                    email='test2@test.test', student_number=2,
@@ -37,33 +37,33 @@ student = Student(full_name='test_student',
                   address='test', phone_number='test',
                   email='test@test.test', student_number=1,
                   average_mark=4)
-#create course
+# create course
 course = Course(title='test course', start_date=datetime.now(),
                 end_date=datetime.now() + timedelta(minutes=600),
                 description="desc test", lectures=[],
                 assignments=assignments, limit=1)
-#create professor
+# create professor
 professor = Professor(name='test_professor', address='test', phone_number='test', email='test@test.test', salary=1000.0)
-#create course progress
+# create course progress
 course_progress = CourseProgress(title='test course', completed_assignments=assignments, course=course)
 
-#add the first student to the course
+# add the first student to the course
 course.add_student(student=student)
-#try to add the second one, though the limit is one student
+# try to add the second one, though the limit is one student
 student2.enroll(course)
-#check the assignments
+# check the assignments
 professor.check_assignment(assignments)
-#get progress to date (now)
+# get progress to date (now)
 print(course_progress.get_progress_to_date(datetime.now()))
-#get a final mark for the course
+# get a final mark for the course
 print(course_progress.get_final_mark())
-#fill a note and print it
+# fill a note and print it
 course_progress.fill_notes("note")
 print(course_progress.notes)
-#delete a note and try to print it
+# delete a note and try to print it
 course_progress.remove_note(datetime.now())
 print(course_progress.notes)
-#unenroll student
+# unenroll student
 course.remove_student(student.id_)
-#try to unenroll him again
+# try to unenroll him again
 course.remove_student(student.id_)
