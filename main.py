@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from staff import Professor, Student
+from staff import Professor, Student, PersonalInfo
 from course import Course, CourseProgress
 
 assignments = {
@@ -67,3 +67,5 @@ print(course_progress.notes)
 course.remove_student(student.id_)
 # try to unenroll him again
 course.remove_student(student.id_)
+a = PersonalInfo("John Dowe", "address", "phone_number", "email", 1, 3, 1000.0)
+print(a.first_name)

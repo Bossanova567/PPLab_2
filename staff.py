@@ -1,5 +1,6 @@
 import itertools
 from typing import List, Any
+from dataclasses import dataclass
 
 
 class Student:
@@ -114,3 +115,33 @@ class Professor:
         for mark, task in assignment.items():
             if task["is_done"]:
                 task["mark"] = 5.0
+
+@dataclass
+class PersonalInfo:
+
+    id_iter = itertools.count()
+
+    def __init__(self, full_name_: str, address: str,
+                 phone_number: str, email: str, position: int, rank: str, salary: float):
+        self.id_ = next(self.id_iter)
+        self.first_name, self.last_name = full_name_.split()
+        self.address = address
+        self.phone_number = phone_number
+        self.email = email
+        self.position = position
+        self.rank = rank
+        self.salary = salary
+        self.full_name = full_name_
+    '''
+    @property
+    def full_name(self):
+        return self._full_name
+        '''
+'''
+    @full_name.setter
+    def full_name(self, value: str) -> None:
+        first_name, last_name = value.split()
+        self.first_name = first_name
+        self.last_name = last_name
+        self._full_name = value
+'''
