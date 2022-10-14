@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from staff import Professor, Student, PersonalInfo
-from course import Course, CourseProgress
+from staff import Professor, Student, PostgraduateStudent, Department
+from course import Course, CourseProgress, Seminar
 
 assignments = {
     "task1": {
@@ -29,43 +29,45 @@ assignments = {
     }
 }
 # create two student
-student2 = Student(full_name='test_student2',
-                   address='test2', phone_number='test2',
-                   email='test2@test.test', student_number=2,
+
+student1 = Student(1, "student1 name", "address1", "phone_number1", "email1", "position1", "rank1", 50, student_number=2,
                    average_mark=3)
-student = Student(full_name='test_student',
-                  address='test', phone_number='test',
-                  email='test@test.test', student_number=1,
-                  average_mark=4)
+student2 = Student(2, "student2 name", "address2", "phone_number2", "email2", "position2", "rank2", 60, student_number=4,
+                   average_mark=4)
 # create course
 course = Course(title='test course', start_date=datetime.now(),
                 end_date=datetime.now() + timedelta(minutes=600),
                 description="desc test", lectures=[],
                 assignments=assignments, limit=1)
 # create professor
-professor = Professor(name='test_professor', address='test', phone_number='test', email='test@test.test', salary=1000.0)
+professor = Professor(3, "name surname", "address2", "phone_number2", "email2", "position2", "rank2", 1000)
 # create course progress
 course_progress = CourseProgress(title='test course', completed_assignments=assignments, course=course)
 
-# add the first student to the course
-course.add_student(student=student)
-# try to add the second one, though the limit is one student
-student2.enroll(course)
-# check the assignments
-professor.check_assignment(assignments)
-# get progress to date (now)
-print(course_progress.get_progress_to_date(datetime.now()))
-# get a final mark for the course
-print(course_progress.get_final_mark())
-# fill a note and print it
-course_progress.fill_notes("note")
-print(course_progress.notes)
-# delete a note and try to print it
-course_progress.remove_note(datetime.now())
-print(course_progress.notes)
-# unenroll student
-course.remove_student(student.id_)
-# try to unenroll him again
-course.remove_student(student.id_)
-a = PersonalInfo("John Dowe", "address", "phone_number", "email", 1, 3, 1000.0)
-print(a.first_name)
+student3 = PostgraduateStudent(4, "student3 name", "address2", "phone_number2", "email2", "position2", "rank2", 60,
+                               student_number=4, average_mark=4)
+department = Department("department", [student1, student3], [professor], [course])
+seminar = Seminar("seminar", datetime.now(), assignments, True, course.title)
+
+course.add_student(student1)
+course.add_student(student1)
+course.add_student(student2)
+course.remove_student(student1)
+
+print(student3.phd_status)
+professor.add_postgraduate_student(student3)
+professor.add_postgraduate_student(student2)
+print(student3.phd_status)
+
+student1.ask_sick_leave(department)
+student3.ask_sick_leave(department)
+professor.ask_sick_leave(department)
+
+professor.send_request(department, "request")
+student1.send_request(department, "request")
+student2.send_request(department, "request")
+
+professor.request_support()
+
+seminar.add_comment("comment")
+print(seminar.implement_item("item"))
