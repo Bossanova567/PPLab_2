@@ -30,9 +30,9 @@ assignments = {
 }
 # create two student
 
-student1 = Student(1, "student1 name", "address1", "phone_number1", "email1", "position1", "rank1", 50, student_number=2,
+student1 = Student(1, "student1_name", "address1", "phone_number1", "email1", "position1", "rank1", 50, student_number=2,
                    average_mark=3)
-student2 = Student(2, "student2 name", "address2", "phone_number2", "email2", "position2", "rank2", 60, student_number=4,
+student2 = Student(1, "student2_name", "address2", "phone_number2", "email2", "position2", "rank2", 60, student_number=4,
                    average_mark=4)
 # create course
 course = Course(title='test course', start_date=datetime.now(),
@@ -40,11 +40,11 @@ course = Course(title='test course', start_date=datetime.now(),
                 description="desc test", lectures=[],
                 assignments=assignments, limit=1)
 # create professor
-professor = Professor(3, "name surname", "address2", "phone_number2", "email2", "position2", "rank2", 1000)
+professor = Professor(3, "name_surname", "address2", "phone_number2", "email2", "position2", "rank2", 1000)
 # create course progress
 course_progress = CourseProgress(title='test course', completed_assignments=assignments, course=course)
 
-student3 = PostgraduateStudent(4, "student3 name", "address2", "phone_number2", "email2", "position2", "rank2", 60,
+student3 = PostgraduateStudent(4, "student3_name", "address2", "phone_number2", "email2", "position2", "rank2", 60,
                                student_number=4, average_mark=4)
 department = Department("department", [student1, student3], [professor], [course])
 seminar = Seminar("seminar", datetime.now(), assignments, True, course.title)

@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
 
-@dataclass
 class PersonalInfo:
     """Represents personal info instance
 
@@ -18,56 +17,25 @@ class PersonalInfo:
             name (str): Staff's name.
             id_: Staff's id.
     """
-    address: str
-    phone_number: str
-    email: str
-    position: str
-    rank: str
-    salary: float
-    first_name: str
-    last_name: str
-    id_: int
-    name: str
-    @property
-    def name(self):
-        """Gets a 'name' value"""
-        return self.name
+    def __init__(self, address: str, phone_number: str, email: str, position: str, rank: str, salary: float,
+    first_name: str, last_name: str, id_: int):
+        self.address = address
+        self.phone_number = phone_number
+        self.email = email
+        self.position = position
+        self.rank = rank
+        self.salary = salary
+        self.first_name = first_name
+        self.last_name = last_name
+        self.id_ = id_
+        self.name = first_name+last_name
 
-    @name.setter
-    def name(self, value: str) -> None:
-        """Sets a 'name' value and splits it into two variables: first_name and last_name
 
-            Args:
-                value: Value, which we want to set.
 
-            Returns:
-                None.
-        """
-        first_name, last_name = value.split()
-        name = value
 
 
 class Staff(ABC, PersonalInfo):
     """Represents staff instance"""
-    @property
-    def personal_info(self) -> PersonalInfo:
-        """Gets a 'personal_info' value"""
-        return self.personal_info
-
-    @personal_info.setter
-    def personal_info(self, value) -> None:
-        """Sets a 'personal_info' value and checks, if assigning value is an object of PersonalInfo
-
-            Args:
-                value: Value, which we want to set.
-
-            Returns:
-                None.
-        """
-        if isinstance(value, PersonalInfo):
-            self.personal_info = value
-        else:
-            print("Object you want to set as personal_info isn't type of PersonalInfo.")
 
     @abstractmethod
     def ask_sick_leave(self, department: Any):
@@ -84,7 +52,7 @@ class Student(Staff):
     """Represents student instance
 
     Attributes:
-        name_ (str): Student's full name.
+        name (str): Student's full name.
         address (str): Student's address.
         phone_number (str): Student's number.
         email (str): Student's email.
@@ -95,17 +63,11 @@ class Student(Staff):
         average_mark (int): Student's average mark
     """
 
-    def __init__(self, id_: int, name_: str, address: str, phone_number: str, email: str, position: str, rank: str,
+    def __init__(self, id_: int, name: str, address: str, phone_number: str, email: str, position: str, rank: str,
             salary: float,  student_number: int, average_mark: int):
         """Student initializer."""
-        self.id_ = id_
-        self.name_ = name_
-        self.address = address
-        self.phone_number = phone_number
-        self.email = email
-        self.position = position
-        self.rank = rank
-        self.salary = salary
+        self.first_name, self.last_name = name.split("_")
+        self.personal_info = PersonalInfo(address, phone_number, email, position, rank, salary, self.first_name, self.last_name, id_)
         self.student_number = student_number
         self.average_mark = average_mark
         self.course_progress: List[Any] = []
@@ -137,11 +99,11 @@ class Student(Staff):
                 if operation was successful, and false, if not.
         """
         for i, student in enumerate(department.students):
-            if student.name_ == self.name_:
+            if student.personal_info.name == self.personal_info.name:
                 department.requests.append(request)
                 print("The request has been sent successfully.")
                 return True
-        print(f"The student {self.name_} does not belong to {department.title} department")
+        print(f"The student {self.personal_info.name} does not belong to {department.title} department")
         return False
 
     def ask_sick_leave(self, department: Any):
@@ -152,9 +114,9 @@ class Student(Staff):
                     Returns:
                         None
                 """
-        department.requests.append(f'Student {self.name_} is ill')
+        department.requests.append(f'Student {self.personal_info.name} is ill')
         if department.proceed_requests():
-            print(f"Student {self.name_} is free from studying until he gets over the illness")
+            print(f"Student {self.personal_info.name} is free from studying until he gets over the illness")
 
 
 class PostgraduateStudent(Staff):
@@ -175,14 +137,9 @@ class PostgraduateStudent(Staff):
     def __init__(self,id_: int, name: str, address: str, phone_number: str, email: str, position: str, rank: str,
             salary: float, student_number: int, average_mark: int):
         """Postgraduate student initializer."""
-        self.id_ = id_
-        self.name_ = name
-        self.address = address
-        self.phone_number = phone_number
-        self.email = email
-        self.position = position
-        self.rank = rank
-        self.salary = salary
+        self.first_name, self.last_name = name.split("_")
+        self.personal_info = PersonalInfo(address, phone_number, email, position, rank, salary, self.first_name,
+                                          self.last_name, id_)
         self.phd_status = "not phd yet"
         self.student_number = student_number
         self.average_mark = average_mark
@@ -216,9 +173,9 @@ class PostgraduateStudent(Staff):
             Returns:
                 None
         """
-        department.requests.append(f'Student {self.name_} is ill')
+        department.requests.append(f'Student {self.personal_info.name} is ill')
         if department.proceed_requests():
-            print(f"Student {self.name_} is free from studying until he gets over the illness")
+            print(f"Student {self.personal_info.name} is free from studying until he gets over the illness")
 
 
 
@@ -241,14 +198,9 @@ class Professor(Staff):
     def __init__(self, id_: int, name: str, address: str, phone_number: str, email: str, position: str, rank: str,
             salary: float):
         """Professor initializer."""
-        self.id_ = id_
-        self.name_ = name
-        self.address = address
-        self.phone_number = phone_number
-        self.email = email
-        self.position = position
-        self.rank = rank
-        self.salary = salary
+        self.first_name, self.last_name = name.split("_")
+        self.personal_info = PersonalInfo(address, phone_number, email, position, rank, salary, self.first_name,
+                                          self.last_name, id_)
         self.assignment = {}
 
     @staticmethod
@@ -277,11 +229,11 @@ class Professor(Staff):
                     if operation was successful, and false, if not.
                 """
         for i, professor in enumerate(department.professors):
-            if professor.name_ == self.name_:
+            if professor.personal_info.name == self.personal_info.name:
                 department.requests.append(request)
                 print("The request has been sent successfully.")
                 return True
-        print(f"The professor {self.name_} does not belong to {department.title} department")
+        print(f"The professor {self.personal_info.name} does not belong to {department.title} department")
         return False
 
     def ask_sick_leave(self, department: Any):
@@ -292,9 +244,9 @@ class Professor(Staff):
                     Returns:
                         None
                 """
-        department.requests.append(f'Professor {self.name_} is ill')
+        department.requests.append(f'Professor {self.personal_info.name} is ill')
         if department.proceed_requests():
-            print(f"Professor {self.name_} is free from teaching until he gets over the illness")
+            print(f"Professor {self.personal_info.name} is free from teaching until he gets over the illness")
 
     def add_postgraduate_student(self, student: PostgraduateStudent) -> PostgraduateStudent:
         """Makes a postgraduate student
@@ -308,11 +260,11 @@ class Professor(Staff):
         if isinstance(student, PostgraduateStudent):
             if student.phd_status == "not phd yet":
                 student.phd_status = "phd"
-                print(f"Student {student.name_} now has phd")
+                print(f"Student {student.personal_info.name} now has phd")
             else:
-                print(f"Student {student.name_} already has phd")
+                print(f"Student {student.personal_info.name} already has phd")
         else:
-            print(f"{student.name_} is not postgraduate student")
+            print(f"{student.personal_info.name} is not postgraduate student")
         return student
 
     def request_support(self) -> None:
@@ -324,7 +276,7 @@ class Professor(Staff):
             Returns:
                 None.
         """
-        print(f"Professor {self.name_} has requested support")
+        print(f"Professor {self.personal_info.name} has requested support")
 
 
 class Department:
@@ -356,3 +308,7 @@ class Department:
                 Bool value.
         """
         return True
+
+
+
+

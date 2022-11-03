@@ -96,7 +96,7 @@ class Course:
                   None
         """
         self.enrollment = Enrollment(student, self)
-        self.enrollment.unenroll(student.id_)
+        self.enrollment.unenroll(student.personal_info.id_)
 
 
 class CourseProgress:
@@ -208,13 +208,13 @@ class Enrollment:
                 self.student.courses.append(self.course)
                 self.student.course_progress.append(course_progress)
                 self.course.students.append(self.student)
-                print(f"Student {self.student.name_} has enrolled into {self.course.title}")
+                print(f"Student {self.student.personal_info.name} has enrolled into {self.course.title}")
             else:
                 print(
-                    f"Student {self.student.name_} can't enroll in this course, because the limit of "
+                    f"Student {self.student.personal_info.name} can't enroll in this course, because the limit of "
                     f"students has been reached")
         except ValueError:
-            print(f"Student {self.student.name_} has already enrolled in this course")
+            print(f"Student {self.student.personal_info.name} has already enrolled in this course")
 
     def unenroll(self, id: int) -> None:
         """Unenrolls a student from a course
@@ -227,12 +227,12 @@ class Enrollment:
 
         """
         for i, student in enumerate(self.course.students):
-            if student.id_ == id:
+            if student.personal_info.id_ == id:
                 self.course.students.pop(i)
                 for j in self.student.courses:
                     if j.title == self.course.title:
                         # student.unenroll(title=self.course.title)
                         self.student.courses.pop(i)
-                        print(f"Student {self.student.name_} has unenrolled from {self.course.title}")
+                        print(f"Student {self.student.personal_info.name} has unenrolled from {self.course.title}")
                         break
                 break
