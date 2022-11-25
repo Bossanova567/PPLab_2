@@ -1,6 +1,6 @@
+from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Any
-from staff import Student
 import itertools
 
 
@@ -14,6 +14,7 @@ class Seminar:
             status (Any): Seminar's status.
             related_course (str): Title of a course, seminar belongs to.
     """
+
     def __init__(self, title: str, deadline: datetime, assignments: List[dict],
                  status: Any, related_course: str):
         """Seminar initializer"""
@@ -34,7 +35,7 @@ class Seminar:
         """
         return f"The {item_name} is implemented."
 
-    def add_comment(self, str: str) -> None:
+    def add_comment(self, str: str):
         """Adds a comment.
 
                 Args:
@@ -44,59 +45,20 @@ class Seminar:
                     None.
                 """
         print(f"The comment {str} is added.")
+        return f"The comment {str} is added."
 
 
-class Course:
-    """Course representation.
+class Course(ABC):
+    @abstractmethod
+    def add_student(self, student: Any) -> None:
+        """ Abstract method """
+        pass
 
-    Attributes:
-        title (str): Course's name.
-        start_date (datetime): Start date.
-        end_date (datetime): End date.
-        description (str): Course's description
-        lectures (List[str]): Course's lectures
-        assignments (List[str]): Course's assignments
-        limit (int): Course's limit for the number of students
-        students (List[Any]): Course's list for enrolled students
+    @abstractmethod
+    def remove_student(self, student: Any) -> None:
+        """ Abstract method """
+        pass
 
-    """
-
-    def __init__(self, title: str, start_date: datetime, end_date: datetime, description: str,
-                 lectures: List[str], assignments: List[str], limit: int):
-        """Course initializer."""
-        self.title = title
-        self.start_date = start_date
-        self.end_date = end_date
-        self.description = description
-        self.lectures = lectures
-        self.assignments = assignments
-        self.limit = limit
-        self.students: List[Any] = []
-        self.seminars: List[int] = []
-
-    def add_student(self, student: Student) -> None:
-        """Enrolls a student from a course
-
-            Arguments:
-                student (Student): Student, which should be enrolled
-
-            Returns:
-                None
-                """
-        self.enrollment = Enrollment(student, self)
-        self.enrollment.enroll()
-
-    def remove_student(self, student: Student) -> None:
-        """Unenrolls a student from a course
-
-            Arguments:
-                student (Student): Student, which should be unenrolled
-
-            Returns:
-                  None
-        """
-        self.enrollment = Enrollment(student, self)
-        self.enrollment.unenroll(student.personal_info.id_)
 
 
 class CourseProgress:
@@ -184,7 +146,7 @@ class CourseProgress:
 
 
 class Enrollment:
-    def __init__(self, student: Student, course: Course):
+    def __init__(self, student: Any, course: Course):
         self.student = student
         self.course = course
 
@@ -236,3 +198,166 @@ class Enrollment:
                         print(f"Student {self.student.personal_info.name} has unenrolled from {self.course.title}")
                         break
                 break
+
+
+class Math(Course):
+    """Math course representation.
+
+        Attributes:
+            title (str): Course's name.
+            start_date (datetime): Start date.
+            end_date (datetime): End date.
+            description (str): Course's description.
+            lectures (List[str]): Course's lectures.
+            assignments (List[str]): Course's assignments.
+            limit (int): Course's limit for the number of students.
+            students (List[Any]): Course's list for enrolled students.
+            control_works_date (datetime): Date of the control works.
+
+        """
+
+    def __init__(self, title: str, start_date: datetime, end_date: datetime, description: str,
+                 lectures: List[str], assignments: List[str], limit: int):
+        """Math course initializer."""
+        self.title = title
+        self.start_date = start_date
+        self.end_date = end_date
+        self.description = description
+        self.lectures = lectures
+        self.assignments = assignments
+        self.limit = limit
+        self.students: List[Any] = []
+        self.seminars: List[int] = []
+        self.control_works_date = None
+
+    def add_student(self, student: Any) -> None:
+        """Enrolls a student into a course
+
+            Arguments:
+                student (Student): Student, which should be enrolled
+
+            Returns:
+                None
+                """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.enroll()
+
+    def remove_student(self, student: Any) -> None:
+        """Unenrolls a student from a course
+
+            Arguments:
+                student (Student): Student, which should be unenrolled
+
+            Returns:
+                  None
+        """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.unenroll(student.personal_info.id_)
+
+class Programming(Course):
+    """Programming course representation.
+
+        Attributes:
+            title (str): Course's name.
+            start_date (datetime): Start date.
+            end_date (datetime): End date.
+            description (str): Course's description.
+            lectures (List[str]): Course's lectures.
+            assignments (List[str]): Course's assignments.
+            limit (int): Course's limit for the number of students.
+            students (List[Any]): Course's list for enrolled students.
+            extra_tasks (List[dict]): Extra tasks for students, who want higher marks.
+
+        """
+
+    def __init__(self, title: str, start_date: datetime, end_date: datetime, description: str,
+                 lectures: List[str], assignments: List[str], limit: int):
+        """Programming course initializer."""
+        self.title = title
+        self.start_date = start_date
+        self.end_date = end_date
+        self.description = description
+        self.lectures = lectures
+        self.assignments = assignments
+        self.limit = limit
+        self.students: List[Any] = []
+        self.seminars: List[int] = []
+        self.extra_tasks = []
+
+    def add_student(self, student: Any) -> None:
+        """Enrolls a student into a course
+
+            Arguments:
+                student (Student): Student, which should be enrolled
+
+            Returns:
+                None
+                """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.enroll()
+
+    def remove_student(self, student: Any) -> None:
+        """Unenrolls a student from a course
+
+            Arguments:
+                student (Student): Student, which should be unenrolled
+
+            Returns:
+                  None
+        """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.unenroll(student.personal_info.id_)
+
+class Algorithms(Course):
+    """Algorithms course representation.
+
+        Attributes:
+            title (str): Course's name.
+            start_date (datetime): Start date.
+            end_date (datetime): End date.
+            description (str): Course's description.
+            lectures (List[str]): Course's lectures.
+            assignments (List[str]): Course's assignments.
+            limit (int): Course's limit for the number of students.
+            students (List[Any]): Course's list for enrolled students.
+            errors (int): Number of errors, which were found in your assignments.
+
+        """
+
+    def __init__(self, title: str, start_date: datetime, end_date: datetime, description: str,
+                 lectures: List[str], assignments: List[str], limit: int):
+        """Algorithms course initializer."""
+        self.title = title
+        self.start_date = start_date
+        self.end_date = end_date
+        self.description = description
+        self.lectures = lectures
+        self.assignments = assignments
+        self.limit = limit
+        self.students: List[Any] = []
+        self.seminars: List[int] = []
+        self.errors = 0
+
+    def add_student(self, student: Any) -> None:
+        """Enrolls a student into a course
+
+            Arguments:
+                student (Student): Student, which should be enrolled
+
+            Returns:
+                None
+                """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.enroll()
+
+    def remove_student(self, student: Any) -> None:
+        """Unenrolls a student from a course
+
+            Arguments:
+                student (Student): Student, which should be unenrolled
+
+            Returns:
+                  None
+        """
+        self.enrollment = Enrollment(student, self)
+        self.enrollment.unenroll(student.personal_info.id_)
