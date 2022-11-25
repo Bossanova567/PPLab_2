@@ -488,7 +488,7 @@ class ProgrammingProfessor(Professor):
             self.course.add_student(student)
 
     def add_extra_tasks(self, task: dict):
-        self.course.extra_tasks.append(task)
+        self.course.extra_tasks.update(task)
 
 
 class AlgorithmsProfessor(Professor):

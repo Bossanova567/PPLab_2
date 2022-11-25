@@ -282,7 +282,7 @@ class Programming(Course):
         self.limit = limit
         self.students: List[Any] = []
         self.seminars: List[int] = []
-        self.extra_tasks = []
+        self.extra_tasks = {}
 
     def add_student(self, student: Any) -> None:
         """Enrolls a student into a course
